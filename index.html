@@ -86,7 +86,7 @@ const levels = [
         {q:"What is the output of the following code?: int a=5,b=3; printf('%d', a+++b);?", options:{A:"10", B:"9", C:"11", D:"Error"}, answer:"A"}
     ]},
     { title:"Level 3", minScore:9, questions:[
-        {q:"What is the output of the following code? int a=5, b=3; printf('%d', a+++b);", options:{A:"8", B:"9", C:"5", D:"Error"}, answer:"A"},
+        {q:"Output: ?", options:{A:"8", B:"9", C:"5", D:"Error"}, answer:"A"},
         {q:"Which pointer statement is false?", options:{A:"Pointers can access array elements", B:"Pointers can store addresses", C:"Pointers can point to functions", D:"Pointers cannot be incremented"}, answer:"D"},
         {q:"Output: int arr[3]={1,2,3}; printf('%d', *arr+2);", options:{A:"3", B:"5", C:"2", D:"1"}, answer:"B"},
         {q:"Which about recursion is true?", options:{A:"Recursion consumes less memory", B:"Each recursive call adds stack frame", C:"Cannot call indirectly", D:"Recursion not allowed"}, answer:"B"},
@@ -149,7 +149,7 @@ function showLevelResult(){
         ${currentLevel < 2 ? '<div style="text-align:center; margin-top:20px;"><button class="start-btn" onclick="proceedNextLevel('+qualified+')">Continue</button></div>' : ''}
     `;
 
-    if(currentLevel === 2 || !qualified){
+    if(currentLevel === 2 || !qualified){ 
         showScore();
         submitScore(); }
 }
@@ -198,9 +198,9 @@ function submitScore(){
     const username = document.getElementById("username").value;
     const formURL = "https://docs.google.com/forms/d/e/1FAIpQLScMZxKPROoHX0neu0sVemXH_UqoxSRzi5XoSg6_hRnKBWsH1A/formResponse";
     const data = new FormData();
-    data.append("entry.184308561", username);  // Replace with your actual entry ID
-    data.append("entry.733507699", score);     // Replace with your actual entry ID
-    data.append("entry.1168524983", new Date().toLocaleString()); // Date/time
+    data.append("entry.184308561", username);  
+    data.append("entry.733507699", score);     
+    data.append("entry.1168524983", new Date().toLocaleString()); 
 
     fetch(formURL, {method:"POST", mode:"no-cors", body:data})
     .then(()=> console.log("Data submitted to Google Form!"));
