@@ -244,6 +244,8 @@ function showScore(){
         message = `Score: ${score}/30\nTest Failed. Try Again!`;
     }
     document.getElementById("finalScore").innerText = message;
+
+    submitToGoogleForm(document.getElementById("username").value, score);
 }
 
 function restartQuiz(){
@@ -262,5 +264,25 @@ function proceedNextLevel(qualified){
     }
 }
 </script>
+    <script>
+function submitToGoogleForm(name, score) {
+  const formURL = "https://docs.google.com/forms/d/e/1FAIpQLScMZxKPROoHX0neu0sVemXH_UqoxSRzi5XoSg6_hRnKBWsH1A/formResponse";
+  const data = new FormData();
+
+  data.append("entry.184308561", Name);
+  data.append("entry.733507699", Score);
+  data.append("entry.1168524983", new Date().toLocaleString());
+
+  fetch(formURL, {
+    method: "POST",
+    mode: "no-cors",
+    body: data
+  }).then(() => {
+    console.log("Data submitted to Google Form!");
+  });
+}
+</script>
+
 </body>
 </html>
+
