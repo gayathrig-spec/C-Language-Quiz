@@ -89,15 +89,16 @@
     <!-- Quiz Page -->
     <div id="quizPage" class="hide">
         <h2 id="levelTitle"></h2>
-        <div class="question" id="questionText"></div>
-        <div class="options">
-            <button id="optionA" onclick="checkAnswer('A')"></button>
-            <button id="optionB" onclick="checkAnswer('B')"></button>
-            <button id="optionC" onclick="checkAnswer('C')"></button>
-            <button id="optionD" onclick="checkAnswer('D')"></button>
+        <div id="questionContainer">
+            <div class="question" id="questionText"></div>
+            <div class="options">
+                <button id="optionA" onclick="checkAnswer('A')"></button>
+                <button id="optionB" onclick="checkAnswer('B')"></button>
+                <button id="optionC" onclick="checkAnswer('C')"></button>
+                <button id="optionD" onclick="checkAnswer('D')"></button>
+            </div>
+            <div class="feedback" id="feedback"></div>
         </div>
-        <div class="feedback" id="feedback"></div>
-    </div>
 
     <!-- Score Page -->
     <div id="scorePage" class="hide">
@@ -285,4 +286,5 @@ function submitToGoogleForm(name, score) {
 
 </body>
 </html>
+
 
