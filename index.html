@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C Quiz Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 700px;
+            margin: 40px auto;
+            background-color: #fff;
+            padding: 20px 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            border-radius: 8px;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        .question {
+            margin: 20px 0;
+        }
+        .options button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px 15px;
+            width: 100%;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .options button:hover {
+            background-color: #ddd;
+        }
+        .hide {
+            display: none;
+        }
+        .feedback {
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .score {
+            text-align: center;
+            font-size: 20px;
+            margin-top: 20px;
+        }
+        .start-btn, .restart-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            border-radius: 6px;
+            background-color: #3498db;
+            color: white;
+            transition: background-color 0.3s;
+        }
+        .start-btn:hover, .restart-btn:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Welcome Page -->
+    <div id="welcomePage">
+        <h1>Welcome to C Language Quiz!</h1>
+        <p>Enter your name:</p>
+        <input type="text" id="username" placeholder="Your Name" />
+        <button class="start-btn" onclick="startQuiz()">Start Quiz</button>
+        <p>Instructions:</p>
+        <ul>
+            <li>There are 3 Levels.</li>
+            <li>Each level has 10 questions.</li>
+            <li>Minimum of 3 correct answers to advance to the next level.</li>
+        </ul>
+    </div>
+
+    <!-- Quiz Page -->
+    <div id="quizPage" class="hide">
+        <h2 id="levelTitle"></h2>
+        <div class="question" id="questionText"></div>
+        <div class="options">
+            <button id="optionA" onclick="checkAnswer('A')"></button>
+            <button id="optionB" onclick="checkAnswer('B')"></button>
+            <button id="optionC" onclick="checkAnswer('C')"></button>
+            <button id="optionD" onclick="checkAnswer('D')"></button>
+        </div>
+        <div class="feedback" id="feedback"></div>
+    </div>
+
+    <!-- Score Page -->
+    <div id="scorePage" class="hide">
+        <h1>Quiz Completed!</h1>
+        <div class="score" id="finalScore"></div>
+        <button class="restart-btn" onclick="restartQuiz()">Restart Quiz</button>
+    </div>
+</div>
+
+<script>
+const levels = [
+    { // Level 1
+        title: "Level 1",
+        questions: [
+            {q: "Who developed the C programming language?", options: {A:"Bjarne Stroustrup", B:"Dennis Ritchie", C:"James Gosling", D:"Ken Thompson"}, answer: "B"},
+            {q: "In which year was C language developed?", options: {A:"1972", B:"1980", C:"1991", D:"1969"}, answer: "A"},
+            {q: "Which of the following is a valid variable name in C?", options: {A:"2name", B:"_name", C:"int", D:"float"}, answer: "B"},
+            {q: "Which function is used to print output in C?", options: {A:"print()", B:"cout<<()", C:"printf()", D:"echo()"}, answer: "C"},
+            {q: "Correct header file for printf() and scanf()?", options: {A:"stdlib.h", B:"string.h", C:"stdio.h", D:"math.h"}, answer: "C"},
+            {q: "Which symbol is used for single-line comments in C?", options: {A:"//", B:"/* */", C:"#", D:"--"}, answer: "A"},
+            {q: "Size of int data type in most 32-bit compilers?", options: {A:"2 bytes", B:"4 bytes", C:"8 bytes", D:"16 bytes"}, answer: "B"},
+            {q: "Which of the following is a keyword in C?", options: {A:"var", B:"main", C:"return", D:"print"}, answer: "C"},
+            {q: "Which operator is used to compare two values in C?", options: {A:"=", B:"==", C:"!=", D:":="}, answer: "B"},
+            {q: "Default return type of a function in C if not specified?", options: {A:"void", B:"int", C:"float", D:"char"}, answer: "B"}
+        ]
+    },
+    { // Level 2
+        title: "Level 2",
+        questions: [
+            {q: "Which loop executes at least once even if condition is false?", options: {A:"for", B:"while", C:"do-while", D:"None"}, answer: "C"},
+            {q: "What is the output: int x=5; printf('%d', ++x);?", options: {A:"5", B:"6", C:"Error", D:"0"}, answer: "B"},
+            {q: "Which is used to access value pointed by pointer?", options: {A:"&", B:"*", C:"->", D:"@"}, answer: "B"},
+            {q: "Correct way to declare array of 10 integers?", options: {A:"int arr[10];", B:"int arr;", C:"int arr();", D:"int arr[9];"}, answer: "A"},
+            {q: "Operator to access struct member through pointer?", options: {A:".", B:"->", C:"*", D:"&"}, answer: "B"},
+            {q: "Output: printf('%d', 5==5); ?", options: {A:"0", B:"1", C:"Error", D:"5"}, answer: "B"},
+            {q: "Which is not a storage class in C?", options: {A:"auto", B:"register", C:"static", D:"float"}, answer: "D"},
+            {q: "Syntax to define int function?", options: {A:"int func(){}", B:"func() int {}", C:"void func(){}", D:"function int(){}"}, answer: "A"},
+            {q: "Correct pointer declaration?", options: {A:"int ptr;", B:"int *ptr;", C:"*int ptr;", D:"ptr int*;"}, answer: "B"},
+            {q: "What is the output of the following code?: int a=5,b=3; printf('%d', a+++b);?", options: {A:"10", B:"9", C:"11", D:"Error"}, answer: "A"}
+        ]
+    },
+    { // Level 3
+        title: "Level 3",
+        questions: [
+            {q:"Output: ?", options:{A:"8", B:"9", C:"5", D:"Error"}, answer:"A"},
+            {q:"Which pointer statement is false?", options:{A:"Pointers can access array elements", B:"Pointers can store addresses", C:"Pointers can point to functions", D:"Pointers cannot be incremented"}, answer:"D"},
+            {q:"Output: int arr[3]={1,2,3}; printf('%d', *arr+2);", options:{A:"3", B:"5", C:"2", D:"1"}, answer:"B"},
+            {q:"Which about recursion is true?", options:{A:"Recursion consumes less memory", B:"Each recursive call adds stack frame", C:"Cannot call indirectly", D:"Recursion not allowed"}, answer:"B"},
+            {q:"Which is not allowed in C?", options:{A:"Nested functions", B:"Function pointers", C:"Pointer arithmetic", D:"Structures"}, answer:"A"},
+            {q:"Correct way to dynamically allocate array of 10 integers?", options:{A:"int *arr=malloc(10);", B:"int *arr=malloc(10*sizeof(int));", C:"int arr=new int[10];", D:"int arr[10]"}, answer:"B"},
+            {q:"True about struct?", options:{A:"Cannot contain arrays", B:"Cannot pass to functions", C:"Members stored contiguous", D:"Can contain other structs"}, answer:"D"},
+            {q:"Output: int a=1;if(a=0){printf('Yes');} else printf('No');", options:{A:"Yes", B:"No", C:"Error", D:"Undefined"}, answer:"B"},
+            {q:"Operator to determine offset of member in struct?", options:{A:"&", B:"sizeof", C:"->", D:"offsetof"}, answer:"D"},
+            {q:"File mode that creates new file if not exist and allows writing?", options:{A:"r", B:"w", C:"r+", D:"a"}, answer:"B"}
+        ]
+    }
+];
+
+let currentLevel = 0;
+let currentQuestion = 0;
+let score = 0;
+
+function startQuiz(){
+    const username = document.getElementById("username").value;
+    if(username.trim() === ""){
+        alert("Please enter your name to start the quiz!");
+        return;
+    }
+    document.getElementById("welcomePage").classList.add("hide");
+    document.getElementById("quizPage").classList.remove("hide");
+    currentLevel = 0;
+    currentQuestion = 0;
+    score = 0;
+    showQuestion();
+}
+
+function showQuestion(){
+    const level = levels[currentLevel];
+    document.getElementById("levelTitle").innerText = level.title + " (Question "+(currentQuestion+1)+"/10)";
+    const question = level.questions[currentQuestion];
+    document.getElementById("questionText").innerText = question.q;
+    document.getElementById("optionA").innerText = "A. "+question.options.A;
+    document.getElementById("optionB").innerText = "B. "+question.options.B;
+    document.getElementById("optionC").innerText = "C. "+question.options.C;
+    document.getElementById("optionD").innerText = "D. "+question.options.D;
+    document.getElementById("feedback").innerText = "";
+}
+
+function checkAnswer(option){
+    const question = levels[currentLevel].questions[currentQuestion];
+    if(option === question.answer){
+        score++;
+        document.getElementById("feedback").innerText = "Correct!";
+    } else {
+        document.getElementById("feedback").innerText = "Wrong! Correct answer: " + question.answer;
+    }
+    currentQuestion++;
+    setTimeout(() => {
+        if(currentQuestion < 10){
+            showQuestion();
+        } else {
+            // check if passed level
+            // Check if player qualifies for next level
+        let qualified = false;
+        if ((currentLevel === 0 && score >= 3) ||
+        (currentLevel === 1 && score >= 6) ||
+        (currentLevel === 2 && score >= 9)) {
+        qualified = true;
+        }
+
+// Show transition message
+        let levelMessage = "";
+        if (qualified && currentLevel < 2) {
+        levelMessage = `Congratulations! you qualified for Level ${currentLevel + 2}!`;
+        } else if (!qualified && currentLevel < 2) {
+        levelMessage = `Sorry, you did not qualify for the next level.`;
+        } else if (currentLevel === 2) {
+        showScore();
+        return;
+        }
+
+        document.getElementById("quizPage").innerHTML = `
+    <h2 style="text-align:center;">${levelMessage}</h2>
+    <div style="text-align:center; margin-top:20px;">
+        <button class="start-btn" onclick="proceedNextLevel(${qualified})">Continue</button>
+    </div>
+`;
+
+        }
+    }, 1000);
+}
+
+function showScore(){
+    document.getElementById("quizPage").classList.add("hide");
+    document.getElementById("scorePage").classList.remove("hide");
+    let message = "";
+    if(score >= 25){
+        message = `Score: ${score}/30\nCongratulations! Time to Level Up :)`;
+    } else if(score >= 20){
+        message = `Score: ${score}/30\nYou have strong basics! Need to brush up some concepts.`;
+    } else if(score >= 6){
+        message = `Score: ${score}/30\nNice Basics! Need to learn a bit more.`;
+    } else {
+        message = `Score: ${score}/30\nTest Failed. Try Again!`;
+    }
+    document.getElementById("finalScore").innerText = message;
+}
+
+function restartQuiz(){
+    document.getElementById("scorePage").classList.add("hide");
+    document.getElementById("welcomePage").classList.remove("hide");
+    document.getElementById("username").value = "";
+}
+function proceedNextLevel(qualified){
+    if(qualified){
+        currentLevel++;
+        currentQuestion = 0;
+        document.getElementById("feedback").innerText = "";
+        showQuestion();
+    } else {
+        showScore();
+    }
+}
+</script>
+</body>
+</html>
