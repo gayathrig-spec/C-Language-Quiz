@@ -38,7 +38,7 @@ This is a **3-level quiz game** designed to test your knowledge of C programming
 ## Live Demo
 
 Try the quiz live here:  
-[Click here to play the C Language Quiz](https://<gayathrig-spec>.github.io/C-Language-Quiz/)
+[Click here to play the C Language Quiz](https://gayathrig-spec.github.io/C-Language-Quiz/)
 
 ---
 
